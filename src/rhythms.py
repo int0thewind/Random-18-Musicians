@@ -7,11 +7,11 @@ from musx.scheduler import Scheduler
 from src.tools import flatten, multi_operation
 
 
-def _channel_check(channel: int):
-    assert 1 <= channel <= 16
+def _channel_check(channel):
+    assert 0 <= channel <= 15
 
 
-def _amp_check(amp: float):
+def _amp_check(amp):
     assert 0.0 < amp <= 1.0
 
 
@@ -45,7 +45,7 @@ def fading(q: Scheduler, /,
 
     for i in range(num_beats):
         for key in keys_stacked:
-            note = MidiNote(dur=duration, key=key, chan=channel, tuning=microtone, amp=curr_amp)
+            note = MidiNote(time=q.now, dur=duration, key=key, chan=channel, tuning=microtone, amp=curr_amp)
             q.out.addevent(note)
         yield duration
         curr_amp += amp_inc if i < num_beats / 2 else -amp_inc
@@ -67,7 +67,7 @@ def steve_reich(q: Scheduler, /,
 
     for key in keys:
         if key is not None:
-            note = MidiNote(dur=duration, key=key, chan=channel, tuning=microtone, amp=amp)
+            note = MidiNote(time=q.now, dur=duration, key=key, chan=channel, tuning=microtone, amp=amp)
             q.out.addevent(note)
         yield duration
 
@@ -94,14 +94,14 @@ def alter_chords(q: Scheduler, /,
     keys_stacked_gen: Generator[Optional[List[float]], Any, None] = cycle(keys_stacked, stop=num_beats)
     duration = quarter_beats / 2
 
-    for keys in keys_stacked_gen:
+    for i in range(num_beats):
+        keys = next(keys_stacked_gen)
         if keys is not None:
             for key in keys:
-                note = MidiNote(dur=duration, key=key, chan=channel, tuning=microtone, amp=amp)
+                note_amp = amp if i % len(keys_stacked) == 0 else amp - 0.1
+                note = MidiNote(time=q.now, dur=duration, key=key, chan=channel, tuning=microtone, amp=note_amp)
                 q.out.addevent(note)
         yield duration
-
-    return
 
 
 def longing(q: Scheduler, /,
@@ -117,7 +117,7 @@ def longing(q: Scheduler, /,
 
     for key, dur in zip(keys, durations):
         if key is not None:
-            note = MidiNote(dur=dur, key=key, chan=channel, tuning=microtone, amp=amp)
+            note = MidiNote(time=q.now, dur=dur, key=key, chan=channel, tuning=microtone, amp=amp)
             q.out.addevent(note)
         yield dur
 

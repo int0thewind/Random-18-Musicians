@@ -9,12 +9,19 @@ def rotate(lis: List[Any], n: int) -> List[Any]:
     return lis[n:] + lis[:n]
 
 
+def list_reverse(lis: List[Any]) -> List[Any]:
+    ret = lis.copy()
+    ret.reverse()
+    return ret
+
+
 def multi_operation(lis: List[T], operation: OperationFunc):
     return [operation(i) for i in lis]
 
 
 def pull_octaves(n: int):
     def operation(x: int): return x + n * 12
+
     return operation
 
 
