@@ -2,7 +2,7 @@ import random
 from typing import List
 
 from musx.generators import choose, markov
-from musx.midi.gm import Marimba, AcousticGrandPiano, Harpsichord
+from musx.midi.gm import Marimba, AcousticGrandPiano
 from musx.midi.midifile import MidiFile
 from musx.midi.midiseq import MidiSeq
 from musx.ran import between
@@ -13,8 +13,8 @@ from musx.scheduler import Scheduler
 from src.instrument import bass, soprano, ornament, backbone
 from src.notes import pentatonic, pentatonic_backbone_chord, longing1, longing2, \
     steve_reich_notes1, steve_reich_notes2, steve_reich_notes_random, steve_reich_notes_prep
-from src.tools import rotate, multi_operation, pull_octaves, list_reverse
 from src.rhythms import fading, steve_reich, alter_chords, longing
+from src.tools import multi_operation, pull_octaves, list_reverse
 
 """
 Define composition name
@@ -143,7 +143,7 @@ def compose_backbone(start_measure, measure_length):
 
 
 soprano_pattern_chain = markov({
-    'fade': [['fade', 0.75], ['long2', 0.05], ['sr1', 0.1], ['sr2', 0.1]],
+    'fade': [['fade', 0.9], ['long2', 0.0], ['sr1', 0.05], ['sr2', 0.05]],
     'long2': [['fade', 0.1], ['long2', 0.5], ['sr1', 0.2], ['sr2', 0.2]],
     'sr1': [['fade', 0.1], ['long2', 0.1], ['sr1', 0.4], ['sr2', 0.4]],
     'sr2': [['fade', 0.1], ['long2', 0.1], ['sr1', 0.4], ['sr2', 0.4]],
@@ -260,7 +260,7 @@ curr_measure += start_measures
 
 # Middle Parts
 
-middle_measures = between(108, 156)
+middle_measures = between(144, 180)
 
 for soprano_channel in soprano_channels:
     compose_soprano(curr_measure, middle_measures, gap_range=[i for i in range(2, 5)], channel=soprano_channel)

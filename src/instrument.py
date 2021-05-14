@@ -4,7 +4,7 @@ from musx.midi.gm import AcousticGrandPiano, Cello, Bassoon, Tuba, Violin, Flute
 
 backbone = choose([Marimba, AcousticGrandPiano])
 
-bass_double = choose([AcousticGrandPiano, Cello], [1, 2])
+# bass_double = choose([AcousticGrandPiano, Cello], [1, 2])
 
 bass = choose([AcousticGrandPiano, Cello, Tuba, Bassoon], [1, 2, 4, 4])
 
